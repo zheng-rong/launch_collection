@@ -1,0 +1,32 @@
+<launch>
+    <param name='/use_sim_time' value="true"/>
+
+<group ns="india">
+
+	<rosparam file="$(find mono_visual_odometry)/config/mega_frames.yaml"/>
+
+    <node   pkg="mono_visual_odometry"
+            name="mvo_node"
+            type="mono_visual_odometry_bag"
+            output="screen">
+    <param name="filename/bag" value="/home/zheng/dataset/india_new_svo/india_Jan19_run1.bag"/>
+    <rosparam file="$(find mono_visual_odometry)/config/mvo_india_para.yaml"/>
+    </node>
+
+
+    
+   
+	<include file="$(find cmu_quadrotor_mesh)/launch/CMUQuad10-MAST.launch">
+		<arg name="name" value="quad_red"/>
+		<arg name="color" value="red"/>
+	</include>
+
+</group>
+
+	<node 	pkg="rviz"
+			name="visualization"
+			type="rviz"
+			args="-d $(find mono_visual_odometry)/config/rviz_mega_mvo.rviz">
+	</node>
+
+</launch>

@@ -1,0 +1,14 @@
+<launch>
+
+  <arg name="vehicle" default="india"/>
+
+
+
+  <group ns="$(arg vehicle)">
+    <group ns="stereo/aligned">
+      <node pkg="stereo_image_proc" type="stereo_image_proc" name="rectifier" output="screen" args="_approximate_sync:=true"/>
+    </group>
+  </group>
+
+
+</launch>

@@ -1,0 +1,12 @@
+<launch>
+
+  <arg name="vehicle" default="mono"/>
+
+  <group ns="$(arg vehicle)">
+    <!--group ns="$(arg vehicle)/sync/mono"-->
+      <node pkg="image_proc" type="image_proc" name="rectifier" output="screen"/>
+    <!--/group-->
+  </group>
+
+
+</launch>

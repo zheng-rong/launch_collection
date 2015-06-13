@@ -1,0 +1,56 @@
+<launch>
+
+
+  <param name="/use_sim_time" value="false"/>
+    <arg name="vehicle" value="mega"/>
+
+  <node pkg="tf"
+        type="static_transform_publisher"
+        name="static_transform_publisher"
+        output="screen"
+        args=" 0 0 0 0 0 0 1 world vicon 1000"/>
+
+  <node name="rviz"
+        pkg="rviz"
+        type="rviz"
+        output="screen"
+        args="-d $(find matlab_quadrotor_example)/rviz/simulation.rviz"/>
+
+  <!-- Receive data from Vicon system -->
+
+    <node   pkg="vicon" 
+            type="vicon" 
+            name="vicon" 
+            output="screen">
+    <param name="vicon_server" value="192.168.10.1"/>
+    <param name="calib_files_dir" value="/home/arkin/"/>
+</node>
+
+
+
+    <!-- Specify a Vicon object "test" -->
+
+    <node   pkg="vicon_odom" 
+            type="vicon_odom" 
+            name="$(arg vehicle)_vicon_odom" 
+            output="screen"> 
+    <remap from="~vicon" to="/vicon/$(arg vehicle)"/> 
+    <remap from="~odom" to="/$(arg vehicle)/odom"/> 
+    <param name="frame_id/fixed" value="vicon"/> 
+    <param name="frame_id/base" value="$(arg vehicle)/base"/> 
+    </node>
+
+
+  <!-- Vehicle Parameters -->
+  <rosparam file="$(find cmu_model_configs)/config/CMUQuad5.yaml"/>
+
+
+  <group ns="mega">
+    <include file="$(find cmu_quadrotor_mesh)/launch/CMUQuad5.launch">
+      <arg name="name" value="quad_red"/>
+      <arg name="color" value="red"/>
+    </include>
+
+ </group>
+
+</launch>
